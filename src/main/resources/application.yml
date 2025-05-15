@@ -11,9 +11,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-    show-sql: {APP_SHOW_SQL}
+    show-sql: ${APP_SHOW_SQL:false}
+    properties:
+      hibernate:
+      format_sql: ${APP_FORMAT_SQL:false}
+
 
   flyway:
+    enabled: true
     url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
     user: ${DB_USER}
     default-schema: ${DB_NAME}
