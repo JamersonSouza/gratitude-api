@@ -23,3 +23,7 @@ spring:
     user: ${DB_USER}
     default-schema: ${DB_NAME}
     password: ${DB_PASSWORD}
+
+token:
+  security:
+    jwt: ${JWT_SECRET}
