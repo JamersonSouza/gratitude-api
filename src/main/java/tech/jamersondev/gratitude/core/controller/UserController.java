@@ -12,7 +12,6 @@ import tech.jamersondev.gratitude.core.service.UserServiceImpl;
 import tech.jamersondev.gratitude.payload.form.CreateUserForm;
 import tech.jamersondev.gratitude.payload.form.UserForm;
 
-import java.net.URI;
 
 @RestController
 @RequestMapping("/user")

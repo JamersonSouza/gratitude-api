@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tb_user")
@@ -32,6 +33,7 @@ public class User extends CoreEntity implements UserDetails {
         this.password = password;
         this.name = name;
         this.createdDate = new Date();
+        setIdentifier(UUID.randomUUID());
     }
 
     @Override
