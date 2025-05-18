@@ -27,6 +27,12 @@ public class User extends CoreEntity implements UserDetails {
 
     private Date createdDate;
 
+    public User(String email, String password, String name) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.createdDate = new Date();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
