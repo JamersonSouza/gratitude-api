@@ -28,6 +28,9 @@ public class User extends CoreEntity implements UserDetails {
 
     private Date createdDate;
 
+    public User() {
+    }
+
     public User(String email, String password, String name) {
         this.email = email;
         this.password = password;

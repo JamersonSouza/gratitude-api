@@ -12,6 +12,7 @@ import tech.jamersondev.gratitude.core.service.UserServiceImpl;
 import tech.jamersondev.gratitude.payload.form.CreateUserForm;
 import tech.jamersondev.gratitude.payload.form.UserForm;
 
+import java.net.URI;
 
 @RestController
 @RequestMapping("/user")
@@ -26,7 +27,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserForm> createUser(@RequestBody @Valid CreateUserForm form, UriComponentsBuilder uriBuilder){
         User user = this.userServiceImpl.create(form);
-        uriBuilder.path("/user/{identifier}").buildAndExpand(user.getIdentifier()).toUri();
-        return ResponseEntity.ok().body(new UserForm(user));
+        URI uri = uriBuilder.path("/user/{identifier}").buildAndExpand(user.getIdentifier()).toUri();
+        return ResponseEntity.created(uri).body(new UserForm(user));
     }
 }
