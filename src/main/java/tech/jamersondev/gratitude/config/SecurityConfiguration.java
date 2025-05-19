@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import tech.jamersondev.gratitude.core.service.UserDetailServiceImpl;
 import tech.jamersondev.gratitude.security.SecurityFilterJwt;
 
 @Configuration
@@ -19,9 +20,11 @@ import tech.jamersondev.gratitude.security.SecurityFilterJwt;
 public class SecurityConfiguration {
 
     private final SecurityFilterJwt securityFilter;
+    private final UserDetailServiceImpl userDetailService;
 
-    public SecurityConfiguration(SecurityFilterJwt securityFilter) {
+    public SecurityConfiguration(SecurityFilterJwt securityFilter, UserDetailServiceImpl userDetailService) {
         this.securityFilter = securityFilter;
+        this.userDetailService = userDetailService;
     }
 
     @Bean
@@ -35,7 +38,8 @@ public class SecurityConfiguration {
                         request.requestMatchers(HttpMethod.POST,"/login", "/user").permitAll();
                         request.anyRequest().authenticated();
                     })
-                    .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                   .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                   .userDetailsService(userDetailService)
                    .build();
     }
 

@@ -1,5 +1,6 @@
 package tech.jamersondev.gratitude.core.service;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,9 +22,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public String authenticationAndGenerateToken(LoginForm form) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(form.email(), form.password())
-        );
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(form.email(), form.password()));
         return this.tokenService.generateToken((User) auth.getPrincipal());
     }
 }
