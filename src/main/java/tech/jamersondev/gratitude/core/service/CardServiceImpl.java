@@ -1,5 +1,7 @@
 package tech.jamersondev.gratitude.core.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tech.jamersondev.gratitude.core.interfaces.CardService;
 import tech.jamersondev.gratitude.core.model.Card;
@@ -7,6 +9,7 @@ import tech.jamersondev.gratitude.core.model.User;
 import tech.jamersondev.gratitude.core.repository.CardRepository;
 import tech.jamersondev.gratitude.core.repository.UserRepository;
 import tech.jamersondev.gratitude.exceptions.UserNotFoundException;
+import tech.jamersondev.gratitude.payload.form.CardPageForm;
 import tech.jamersondev.gratitude.payload.form.CreateCardForm;
 
 import java.util.UUID;
@@ -29,5 +32,10 @@ public class CardServiceImpl implements CardService {
         );
         Card card = new Card(form.cardType(), form.color(), form.text(), user);
         return this.cardRepository.save(card);
+    }
+
+    @Override
+    public Page<CardPageForm> list(Pageable pageable) {
+        return this.cardRepository.findAll(pageable).map(CardPageForm::new);
     }
 }

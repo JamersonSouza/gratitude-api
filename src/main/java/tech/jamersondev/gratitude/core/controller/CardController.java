@@ -1,16 +1,22 @@
 package tech.jamersondev.gratitude.core.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import tech.jamersondev.gratitude.core.model.Card;
 import tech.jamersondev.gratitude.core.service.CardServiceImpl;
 import tech.jamersondev.gratitude.payload.form.CardForm;
+import tech.jamersondev.gratitude.payload.form.CardPageForm;
 import tech.jamersondev.gratitude.payload.form.CreateCardForm;
 
 import java.net.URI;
@@ -31,5 +37,13 @@ public class CardController {
         Card card = this.cardServiceImpl.save(form);
         URI uri = builder.path("/card/{identifier}").buildAndExpand(card.getIdentifier()).toUri();
         return ResponseEntity.created(uri).body(new CardForm(card.getIdentifier().toString()));
+    }
+
+    @GetMapping
+    @Transactional(readOnly = true)
+    public Page<CardPageForm> listCards(@RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return this.cardServiceImpl.list(pageable);
     }
 }
