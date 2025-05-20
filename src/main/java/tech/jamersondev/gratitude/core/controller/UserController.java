@@ -2,6 +2,7 @@ package tech.jamersondev.gratitude.core.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class UserController {
     }
 
     @PostMapping
+    @Transactional(readOnly = false)
     public ResponseEntity<UserForm> createUser(@RequestBody @Valid CreateUserForm form, UriComponentsBuilder uriBuilder){
         User user = this.userServiceImpl.create(form);
         URI uri = uriBuilder.path("/user/{identifier}").buildAndExpand(user.getIdentifier()).toUri();

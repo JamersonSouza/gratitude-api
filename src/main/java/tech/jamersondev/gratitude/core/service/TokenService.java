@@ -18,7 +18,7 @@ public class TokenService {
 
     public String generateToken(User user){
         return JWT.create().withIssuer("Gratitude App")
-                .withSubject(user.getName()).withExpiresAt(dateExpiration())
+                .withSubject(user.getEmail()).withExpiresAt(dateExpiration())
                 .sign(Algorithm.HMAC256(securityJwt));
     }
 
