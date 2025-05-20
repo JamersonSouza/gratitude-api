@@ -30,6 +30,16 @@ public class Card extends CoreEntity {
     @ManyToOne
     private User user;
 
+    public Card(CardTypeEnum cardTypeEnum, String color, String text, User user) {
+        this.cardTypeEnum = cardTypeEnum;
+        this.color = color != null ? color : "#4CAFAD";
+        this.text = text;
+        this.user = user;
+        this.createdDate = new Date();
+        this.isFavorite = false;
+        setIdentifier(UUID.randomUUID());
+    }
+
     public Card() {
     }
 
