@@ -45,7 +45,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Test user controller")
+    @DisplayName("Test create user controller")
     void testUserController_WhenCreateUser_thenReturnSaveUser() throws Exception {
         CreateUserForm createUserFormAsMock = new CreateUserForm(
                 "james@mail.com",
