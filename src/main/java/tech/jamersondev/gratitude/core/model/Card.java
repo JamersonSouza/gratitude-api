@@ -6,6 +6,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import tech.jamersondev.gratitude.core.enums.CardTypeEnum;
+import tech.jamersondev.gratitude.payload.form.UpdateCardForm;
 
 import java.util.Date;
 import java.util.UUID;
@@ -38,6 +39,12 @@ public class Card extends CoreEntity {
         this.createdDate = new Date();
         this.isFavorite = false;
         setIdentifier(UUID.randomUUID());
+    }
+
+    public void updateCard(UpdateCardForm form) {
+        this.text = form.text();
+        this.color = form.color();
+        this.cardTypeEnum = form.cardType();
     }
 
     public Card() {
@@ -98,4 +105,6 @@ public class Card extends CoreEntity {
     public void setUser(User user) {
         this.user = user;
     }
+
+
 }

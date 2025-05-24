@@ -10,10 +10,12 @@ import tech.jamersondev.gratitude.core.model.User;
 import tech.jamersondev.gratitude.core.repository.CardRepository;
 import tech.jamersondev.gratitude.core.repository.UserRepository;
 import tech.jamersondev.gratitude.core.repository.speficiation.builder.CardSpecificationBuilder;
+import tech.jamersondev.gratitude.exceptions.CardNotFoundException;
 import tech.jamersondev.gratitude.exceptions.UserNotFoundException;
 import tech.jamersondev.gratitude.payload.filters.CardFiltersForm;
 import tech.jamersondev.gratitude.payload.form.CardPageForm;
 import tech.jamersondev.gratitude.payload.form.CreateCardForm;
+import tech.jamersondev.gratitude.payload.form.UpdateCardForm;
 
 import java.util.UUID;
 
@@ -42,5 +44,21 @@ public class CardServiceImpl implements CardService {
         Specification<Card> spec = CardSpecificationBuilder.builder()
                 .withFilters(new CardFiltersForm(userIdentifier)).build();
         return this.cardRepository.findAll(spec, pageable).map(CardPageForm::new);
+    }
+
+    @Override
+    public void delete(UUID cardIdentifier) {
+        Card card = this.cardRepository.findCardByIdentifier(cardIdentifier)
+                .orElseThrow(() -> new CardNotFoundException(String.format("Card not found with id %s", cardIdentifier)));
+        this.cardRepository.delete(card);
+
+    }
+
+    @Override
+    public Card update(UpdateCardForm form, UUID cardIdentifier) {
+        Card card = this.cardRepository.findCardByIdentifier(cardIdentifier)
+                .orElseThrow(() -> new CardNotFoundException(String.format("Card not found with id %s", cardIdentifier)));
+        card.updateCard(form);
+        return card;
     }
 }
