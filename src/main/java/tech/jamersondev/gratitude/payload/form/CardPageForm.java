@@ -4,9 +4,10 @@ import tech.jamersondev.gratitude.core.model.Card;
 
 import java.util.Date;
 
-public record CardPageForm(String text, String color, boolean isFavorite, UserForm user, Date createdDate, String identifier) {
+public record CardPageForm(String text, String color, boolean isFavorite, UserForm user, Date createdDate, String identifier, Date updatedDate) {
     public CardPageForm(Card card) {
         this(card.getText(), card.getColor(), card.isFavorite(),
-                new UserForm(card.getUser()), card.getCreatedDate(), card.getIdentifier().toString());
+                new UserForm(card.getUser()), card.getCreatedDate(), card.getIdentifier().toString(),
+                card.getUpdatedDate());
     }
 }

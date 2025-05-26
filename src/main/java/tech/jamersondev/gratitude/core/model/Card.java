@@ -45,6 +45,7 @@ public class Card extends CoreEntity {
         this.text = form.text();
         this.color = form.color();
         this.cardTypeEnum = form.cardType();
+        this.updatedDate = new Date();
     }
 
     public Card() {
