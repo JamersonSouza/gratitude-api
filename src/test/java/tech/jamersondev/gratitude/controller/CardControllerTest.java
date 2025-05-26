@@ -81,8 +81,8 @@ class CardControllerTest {
 
         UserForm userForm = new UserForm(UUID.randomUUID().toString(), "james");
 
-        CardPageForm card1 = new CardPageForm("card 1", "#fff", false, userForm, new Date());
-        CardPageForm card2 = new CardPageForm("card 2", "#000",true, userForm, new Date());
+        CardPageForm card1 = new CardPageForm("card 1", "#fff", false, userForm, new Date(), UUID.randomUUID().toString());
+        CardPageForm card2 = new CardPageForm("card 2", "#000",true, userForm, new Date(), UUID.randomUUID().toString());
 
         List<CardPageForm> content = List.of(card1, card2);
         Page<CardPageForm> pageResult = new PageImpl<>(content, PageRequest.of(page, size), content.size());
