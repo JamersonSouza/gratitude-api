@@ -64,8 +64,8 @@ public class CardController {
     @Transactional(readOnly = false)
     public ResponseEntity<CardForm> updateCard(@PathVariable("identifier") UUID cardIdentifier,
                                                @RequestBody @Valid UpdateCardForm form){
-        this.cardServiceImpl.update(form, cardIdentifier);
-        return null;
+        Card card = this.cardServiceImpl.update(form, cardIdentifier);
+        return ResponseEntity.ok().body(new CardForm(card));
     }
 
 }
