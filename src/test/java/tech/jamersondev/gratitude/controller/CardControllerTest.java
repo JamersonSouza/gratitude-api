@@ -20,8 +20,10 @@ import tech.jamersondev.gratitude.core.enums.CardTypeEnum;
 import tech.jamersondev.gratitude.core.model.Card;
 import tech.jamersondev.gratitude.core.model.User;
 import tech.jamersondev.gratitude.core.service.CardServiceImpl;
+import tech.jamersondev.gratitude.payload.form.CardForm;
 import tech.jamersondev.gratitude.payload.form.CardPageForm;
 import tech.jamersondev.gratitude.payload.form.CreateCardForm;
+import tech.jamersondev.gratitude.payload.form.UpdateCardForm;
 import tech.jamersondev.gratitude.payload.form.UserForm;
 
 import java.util.Date;
@@ -30,8 +32,12 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -102,5 +108,35 @@ class CardControllerTest {
                 .andExpect(jsonPath("$.size").value(size))
                 .andExpect(jsonPath("$.number").value(page))
                 .andExpect(jsonPath("$.totalElements").value(2));
+    }
+
+    @Test
+    @DisplayName("Test Card Controller - Delete card")
+    void testCardController_WhenDeleteCard_thenReturnSaveCard() throws Exception {
+        UUID cardId = UUID.randomUUID();
+        // Mock pro método void de deleção
+        doNothing().when(cardService).delete(cardId);
+
+        mockMvc.perform(delete("/card/{identifier}", cardId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("Test Card Controller - Update card")
+    void testCardController_WhenUpdateCard_thenReturnUpdatedCard() throws Exception {
+        UUID cardId = UUID.randomUUID();
+
+        UpdateCardForm updateForm = new UpdateCardForm("texto apenas de teste", "#FFF", CardTypeEnum.DREAM);
+
+        Card cardUpdate = mock(Card.class);
+        when(cardUpdate.getIdentifier()).thenReturn(cardId);
+
+        when(cardService.update(updateForm, cardId)).thenReturn(cardUpdate);
+
+        mockMvc.perform(put("/card/{identifier}", cardId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(updateForm)))
+                .andExpect(status().isOk());
     }
 }
