@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +13,7 @@ import tech.jamersondev.gratitude.core.model.User;
 import tech.jamersondev.gratitude.core.service.AuthenticationServiceImpl;
 import tech.jamersondev.gratitude.core.service.TokenService;
 import tech.jamersondev.gratitude.payload.form.LoginForm;
+import tech.jamersondev.gratitude.payload.form.TokenForm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -51,10 +51,10 @@ class AuthenticationServiceImplTest {
         when(tokenService.generateToken(user)).thenReturn("mocked-jwt-token");
 
         // Act
-        String token = authenticationService.authenticationAndGenerateToken(form);
+        TokenForm tokenForm = authenticationService.authenticationAndGenerateToken(form);
 
         // Assert
-        assertEquals("mocked-jwt-token", token);
+        assertEquals("mocked-jwt-token", tokenForm.accessToken());
 
         verify(authenticationManager).authenticate(argThat(auth -> {
             return auth instanceof UsernamePasswordAuthenticationToken &&
