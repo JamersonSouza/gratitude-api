@@ -48,8 +48,10 @@ class LoginControllerTest {
 
         LoginForm loginForm = new LoginForm("jamerson@protonmail.com", "12345678");
         String token =UUID.randomUUID().toString();
+        String refreshToken = UUID.randomUUID().toString();
+        TokenForm tokenForm = new TokenForm(token, refreshToken);
 
-        when(authenticationService.authenticationAndGenerateToken(loginForm)).thenReturn(token);
+        when(authenticationService.authenticationAndGenerateToken(loginForm)).thenReturn(tokenForm);
 
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
