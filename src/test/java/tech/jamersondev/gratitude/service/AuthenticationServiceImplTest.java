@@ -13,6 +13,7 @@ import tech.jamersondev.gratitude.core.model.User;
 import tech.jamersondev.gratitude.core.service.AuthenticationServiceImpl;
 import tech.jamersondev.gratitude.core.service.TokenService;
 import tech.jamersondev.gratitude.payload.form.LoginForm;
+import tech.jamersondev.gratitude.payload.form.RefreshTokenForm;
 import tech.jamersondev.gratitude.payload.form.TokenForm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,6 +63,16 @@ class AuthenticationServiceImplTest {
                     (auth).getCredentials().equals(password);
         }));
         verify(tokenService).generateToken(user);
+    }
+
+    @Test
+    void testGenerateRefreshToken() {
+        String token = "refresh-token";
+        RefreshTokenForm form = new RefreshTokenForm(token);
+        when(tokenService.refreshAccessToken(token)).thenReturn("novo-access-token");
+        String refreshToken = authenticationService.refreshToken(form);
+        assertEquals("novo-access-token", refreshToken);
+        verify(tokenService).refreshAccessToken(token);
     }
 }
 

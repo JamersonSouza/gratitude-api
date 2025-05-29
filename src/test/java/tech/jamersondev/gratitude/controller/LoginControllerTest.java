@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import tech.jamersondev.gratitude.core.controller.LoginController;
 import tech.jamersondev.gratitude.core.service.AuthenticationServiceImpl;
 import tech.jamersondev.gratitude.payload.form.LoginForm;
+import tech.jamersondev.gratitude.payload.form.RefreshTokenForm;
 import tech.jamersondev.gratitude.payload.form.TokenForm;
 
 import java.util.UUID;
@@ -58,5 +59,17 @@ class LoginControllerTest {
                         .content(mapper.writeValueAsString(loginForm)))
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    @DisplayName("Test refresh token - controller")
+    void testGenerateRefreshToken() throws Exception {
+        String jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC";
+        RefreshTokenForm form = new RefreshTokenForm(jwtToken);
+        when(authenticationService.refreshToken(form)).thenReturn(jwtToken);
+        mockMvc.perform(post("/login/refresh-token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(form)))
+                .andExpect(status().isOk());
     }
 }
