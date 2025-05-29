@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tech.jamersondev.gratitude.core.service.AuthenticationServiceImpl;
 import tech.jamersondev.gratitude.payload.form.LoginForm;
+import tech.jamersondev.gratitude.payload.form.RefreshTokenForm;
 import tech.jamersondev.gratitude.payload.form.TokenForm;
 
 @RestController
@@ -22,7 +23,13 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<TokenForm> login(@RequestBody @Valid LoginForm form){
-        String token = this.authenticationService.authenticationAndGenerateToken(form);
-        return ResponseEntity.ok(new TokenForm(token));
+        TokenForm tokens = this.authenticationService.authenticationAndGenerateToken(form);
+        return ResponseEntity.ok(tokens);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<TokenForm> refreshToken(@RequestBody RefreshTokenForm form){
+        String newAccessToken = this.authenticationService.refreshToken(form);
+        return ResponseEntity.ok(new TokenForm(newAccessToken, ""));
     }
 }
