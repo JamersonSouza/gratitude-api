@@ -1,5 +1,7 @@
 package tech.jamersondev.gratitude.core.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,6 +32,7 @@ public class CardServiceImpl implements CardService {
         this.userRepository = userRepository;
     }
 
+    @CacheEvict(value = "list_cards_cache", allEntries = true)
     @Override
     public Card save(CreateCardForm form){
         User user = this.userRepository.findUserByIdentifier(UUID.fromString(form.userId())).orElseThrow(
@@ -39,6 +42,7 @@ public class CardServiceImpl implements CardService {
         return this.cardRepository.save(card);
     }
 
+    @Cacheable(value = "list_cards_cache", key = "{#pageable.pageNumber, #pageable.pageSize, #pageable.sort}")
     @Override
     public Page<CardPageForm> list(String userIdentifier, Pageable pageable) {
         Specification<Card> spec = CardSpecificationBuilder.builder()
