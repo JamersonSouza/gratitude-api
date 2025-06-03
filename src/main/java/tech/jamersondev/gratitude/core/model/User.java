@@ -7,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +17,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tb_user")
-public class User extends CoreEntity implements UserDetails {
+public class User extends CoreEntity implements UserDetails, Serializable {
+    @Serial
+    private static final long serialVersionUID = 3576177660994397802L;
 
     @Column(length = 128)
     private String email;

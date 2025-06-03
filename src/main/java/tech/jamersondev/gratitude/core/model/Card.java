@@ -8,12 +8,17 @@ import jakarta.persistence.Table;
 import tech.jamersondev.gratitude.core.enums.CardTypeEnum;
 import tech.jamersondev.gratitude.payload.form.UpdateCardForm;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
 @Table(name = "tb_card")
-public class Card extends CoreEntity {
+public class Card extends CoreEntity implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 8085356248148438672L;
 
     @Enumerated(EnumType.STRING)
     private CardTypeEnum cardTypeEnum;
