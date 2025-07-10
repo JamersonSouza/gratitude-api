@@ -12,8 +12,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import tech.jamersondev.gratitude.core.service.UserDetailServiceImpl;
 import tech.jamersondev.gratitude.security.SecurityFilterJwt;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +37,7 @@ public class SecurityConfiguration {
            return http
                     .headers(h -> h.frameOptions(f -> f.sameOrigin()))
                    .csrf(CsrfConfigurer::disable)
+                   .cors(cors -> cors.configurationSource(corsConfiguration()))
                    .sessionManagement(session ->
             session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(request -> {
@@ -54,4 +60,18 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfiguration() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("*")); // Temporário apenas para testes locais
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Authorization")); // Importante para o front ler headers
+        configuration.setAllowCredentials(true); // Isso é ESSENCIAL quando o envia token
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
