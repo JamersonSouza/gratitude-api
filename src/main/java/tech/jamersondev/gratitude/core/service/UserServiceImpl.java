@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import tech.jamersondev.gratitude.core.interfaces.UserService;
 import tech.jamersondev.gratitude.core.model.User;
 import tech.jamersondev.gratitude.core.repository.UserRepository;
+import tech.jamersondev.gratitude.exceptions.EmailAlreadyExistsException;
 import tech.jamersondev.gratitude.payload.form.CreateUserForm;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,10 +25,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(CreateUserForm form) {
+    public User create(CreateUserForm form){
         LOGGER.info("Create new user with name: {}", form.name());
+        if(verifyExistUserEmail(form.email())){
+            throw new EmailAlreadyExistsException(form.email());
+        }
         String encodedPassword  = this.passwordEncoder.encode(form.password());
         User user = new User(form.email(), encodedPassword, form.name());
         return this.userRepository.save(user);
+    }
+
+    @Override
+    public boolean verifyExistUserEmail(String email) {
+      return this.userRepository.findByEmail(email).isPresent();
     }
 }

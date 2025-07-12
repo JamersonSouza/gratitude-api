@@ -5,4 +5,6 @@ import tech.jamersondev.gratitude.payload.form.CreateUserForm;
 
 public interface UserService {
     User create(CreateUserForm form);
+
+    boolean verifyExistUserEmail(String email);
 }
