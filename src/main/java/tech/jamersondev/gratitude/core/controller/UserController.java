@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping
     @Transactional(readOnly = false)
-    public ResponseEntity<UserForm> createUser(@RequestBody @Valid CreateUserForm form, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<UserForm> createUser(@RequestBody @Valid CreateUserForm form, UriComponentsBuilder uriBuilder) throws Exception {
         User user = this.userServiceImpl.create(form);
         URI uri = uriBuilder.path("/user/{identifier}").buildAndExpand(user.getIdentifier()).toUri();
         return ResponseEntity.created(uri).body(new UserForm(user));

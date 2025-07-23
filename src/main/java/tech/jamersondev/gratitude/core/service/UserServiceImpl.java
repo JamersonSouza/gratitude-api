@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(CreateUserForm form){
+    public User create(CreateUserForm form) throws Exception{
         LOGGER.info("Create new user with name: {}", form.name());
         if(verifyExistUserEmail(form.email())){
             throw new EmailAlreadyExistsException(form.email());
